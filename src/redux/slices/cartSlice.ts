@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getFromLocalStorage, saveToLocalStorage, StorageKeys } from "../../utils/localStorage";
 
 interface CartItem {
   id: number;
@@ -13,7 +14,7 @@ interface CartState {
 }
 
 const initialState: CartState = {
-  items: [],
+  items: getFromLocalStorage(StorageKeys.CART_ITEMS,[]),
   total: 0,
 };
 
@@ -28,6 +29,7 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...action.payload, quantity: 1 });
       }
+      saveToLocalStorage(StorageKeys.CART_ITEMS, state.items);
       state.total += action.payload.price;
     },
     removeItem: (state, action: PayloadAction<number>) => {
@@ -35,11 +37,13 @@ const cartSlice = createSlice({
       if (itemIndex !== -1) {
         state.total -= state.items[itemIndex].price * state.items[itemIndex].quantity;
         state.items.splice(itemIndex, 1);
+        saveToLocalStorage(StorageKeys.CART_ITEMS, state.items);
       }
     },
     clearCart: (state) => {
       state.items = [];
       state.total = 0;
+      saveToLocalStorage(StorageKeys.CART_ITEMS, []);
     },
   },
 });

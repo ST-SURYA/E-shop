@@ -39,7 +39,7 @@ const HomePage = () => {
           Shop by Category:
         </Typography>
         <Grid container spacing={2} justifyContent="center">
-          {categories.map((category, index) => (
+          {categories.map((category : string, index : number) => (
             <Grid item key={index}>
               <Button variant="contained" color="secondary" sx={{ margin: 1 }}>
                 {category}

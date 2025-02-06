@@ -1,21 +1,31 @@
-import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
+import React from "react";
+import { Card, CardContent, Typography, CardMedia, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { addItem } from "../redux/slices/cartSlice"; // Assuming your Redux slice handles adding to cart
 
 interface ItemCardProps {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  onAddToCart: () => void;
+  item: {
+    id: number;
+    name: string;
+    price: number;
+    imageUrl: string;
+  };
 }
 
-const ItemCard = ({ id, name, price, image, onAddToCart }: ItemCardProps) => {
+const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(addItem(item)); // Add the item to the cart using Redux
+  };
+
   return (
-    <Card sx={{ maxWidth: 300, margin: "auto", textAlign: "center" }}>
-      <CardMedia component="img" height="180" image={image} alt={name} />
+    <Card>
+      <CardMedia component="img" alt={item.name} height="200" image={item.imageUrl} />
       <CardContent>
-        <Typography variant="h6">{name}</Typography>
-        <Typography variant="body1">${price}</Typography>
-        <Button variant="contained" sx={{ marginTop: 1 }} onClick={onAddToCart}>
+        <Typography variant="h6">{item.name}</Typography>
+        <Typography variant="body1">${item.price}</Typography>
+        <Button variant="contained" color="primary" onClick={handleAddToCart}>
           Add to Cart
         </Button>
       </CardContent>
